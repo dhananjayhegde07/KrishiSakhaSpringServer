@@ -55,14 +55,6 @@ public class ModelController {
              @RequestPart("image") MultipartFile image,
             @Valid @RequestPart("data")DetectReq req
             ){
-        try {
-            String cur=System.getProperty("user.dir");
-            Path path= Paths.get(Objects.requireNonNull(image.getOriginalFilename()));
-            Files.write(path,image.getBytes());
-
-        }catch (Exception e){
-            System.out.println(e);
-        }
         User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PredictionRes res=null;
         try {

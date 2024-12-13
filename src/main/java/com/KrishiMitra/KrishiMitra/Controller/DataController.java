@@ -94,19 +94,11 @@ public class DataController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/public/test")
-    public ResponseEntity<?> test(){
-        NPKvalues npKvalues=modelInputService.getNPKValues(userService.getUserByUsername("dhananjayhegde7").getAddress().getPin());
-        InputWeatherData weatherData=modelInputService.getWeatherData(userService.getUserByUsername("dhananjayhegde7").getAddress().getPin());
-        CropRecResponse response = predictionService.getCropRecommendation(npKvalues,weatherData);
-        System.out.println(predictionService.getCropRecommend(response.getCrop()));
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     @GetMapping("/weatherSoilData")
     public ResponseEntity<?> getWeatherSoilData(){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(user);
         NPKvalues npKvalues = modelInputService.getNPKValues(user.getAddress().getPin());
         WeatherData weatherData = modelInputService.getWeatherDataFront(user.getAddress().getPin());
         return new ResponseEntity<>(new WeatherRes(weatherData,npKvalues),HttpStatus.OK);

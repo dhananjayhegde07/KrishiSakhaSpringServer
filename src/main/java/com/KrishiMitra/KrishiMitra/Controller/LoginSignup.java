@@ -55,7 +55,7 @@ public class LoginSignup {
             );
             SecurityContextHolder.getContext().setAuthentication(auth);
 
-
+        System.out.println(auth.getPrincipal());
         String jwt=jwtUtils.getJWT((User) auth.getPrincipal());
         return new ResponseEntity<LoginRes>(
                 new LoginRes(
