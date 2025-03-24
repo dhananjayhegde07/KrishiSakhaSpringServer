@@ -130,6 +130,19 @@ public class ModelController {
                 predictionService.getfertilizerRecommendModel(response.getFertilizer())),HttpStatus.OK);
     }
 
+    @PostMapping("/predict/pest")
+    public ResponseEntity<?> getPestiside(@Valid @RequestPart("image") MultipartFile image){
+        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        PestRecommend res = null;
+        try {
+            res = predictionService.predictPest(image);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<>(res,HttpStatus.OK);
+
+    }
+
     @PostMapping("/local/registerType")
     public ResponseEntity<?> registerTypes(@RequestBody @Valid Map<String,String[]> types){
         CropTypes obj=typesRepo.findAll().get(0);

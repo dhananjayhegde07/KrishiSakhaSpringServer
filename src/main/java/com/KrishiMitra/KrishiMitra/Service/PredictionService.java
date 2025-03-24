@@ -131,4 +131,38 @@ public class PredictionService {
         }
         return response.getBody();
     }
+
+    public PestRecommend predictPest(MultipartFile file) throws IOException {
+        String url = "http://127.0.0.1:8000/pest";
+
+        // Prepare headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        ByteArrayResource fileAsResource = new ByteArrayResource(file.getBytes()) {
+            @Override
+            public String getFilename() {
+                return file.getOriginalFilename();
+            }
+        };
+
+        // Create multipart request body
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("image", fileAsResource);  // Send image as file
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        ResponseEntity<PestRecommend> response;
+
+        try {
+            // Send POST request to FastAPI
+            response = template.postForEntity(url, requestEntity, PestRecommend.class);
+        } catch (Exception e) {
+            System.out.println("Error while calling FastAPI: " + e.getMessage());
+            return null;
+        }
+
+        // Return the response from FastAPI
+        return response.getBody();
+    }
+
 }
